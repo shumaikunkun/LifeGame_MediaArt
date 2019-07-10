@@ -11,17 +11,12 @@ public class LightScript : MonoBehaviour {
 //	const int width = 128;
 //	const int height = 128;
 
-	const int width = 13;
-	const int height = 13;
+	const int width = 128;
+	const int height = 128;
 
 	// Use this for initialization
 
-
-	int[] all_zero = new int[13];
-	int[] all_one= Enumerable.Repeat<int>(1,13).ToArray();
-
-	int[,] field = new int[width, height];
-
+	int[][] field = Enumerable.Repeat<int[]>((Enumerable.Repeat<int>(0,height).ToArray()),width).ToArray();
 
 
 //	public int[,] field=new int[width,height]{
@@ -178,7 +173,7 @@ public class LightScript : MonoBehaviour {
 
 	void Start () {
 
-		for(int i =0;i<13;i++){field[i]=all_zero;}
+		for(int j=0;j<height;j++) field[height/2][j]=1;
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
@@ -203,20 +198,20 @@ public class LightScript : MonoBehaviour {
 					for(int y=-1;y<=1;y++){
 						if(x!=0 || y!=0){
 							if(i+x>=0 && i+x<=width-1 && j+y>=0 && j+y<=height-1 ){
-								if(field[i+x,j+y]>=1){
+								if(field[i+x][j+y]>=1){
 									count+=1;
 								}
 							}
 						}
 					}
 				}
-				copy[i,j]=next_state(field[i,j],count);
+				copy[i,j]=next_state(field[i][j],count);
 			}
 		}
 		for(int i=0;i<width;i++){
 			for(int j=0;j<height;j++){
-				GameObject.Find ("light-" + i + "-" + j).GetComponent<Renderer> ().material.color = new Color (0, field[i,j]*255, 0);
-				field[i,j]=copy[i,j];
+				GameObject.Find ("light-" + i + "-" + j).GetComponent<Renderer> ().material.color = new Color (0, field[i][j]*255, 0);
+				field[i][j]=copy[i,j];
 			}
 		}
 	}
